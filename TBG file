@@ -1,0 +1,290 @@
+import os
+os.system('color b')
+from pygame import mixer
+import time
+room = 1
+BlueKey = 0
+YellowKey = 0
+sword = 0
+Apple = 0
+cheatsheet = input("")
+import random
+print("USE CORRECT PUNCTUATION OR ELSE THIS WILL NOT WORK")
+print("Tip: You can use The Command 'Look' to look around rooms")
+inv = []
+STOPGAME = 0
+choice = NotImplemented
+cheatmenu = NotImplemented
+PlayerHealth = 100
+beatmonster = False
+if cheatsheet == "CHEAT_MENU":
+    while cheatmenu != "STOP":
+        if cheatsheet == "CHEAT_MENU":
+            cheatmenu = input("Welcome to the cheat menu, please enter if you want to get a item or go to a room (Rooms for rooms, Items for items), say STOP to stop")
+            if cheatmenu == "Rooms":
+                room = int(input("Welcome to the Room Menu! enter any room you want to go to:"))
+            if cheatmenu == "Items":
+                itemnamecheat = input("Input the item you want")
+                if itemnamecheat == "Sword":
+                    inv.append("Sword")
+                    sword = 1
+                if itemnamecheat == "Apple":
+                    inv.append("Apple")
+                    Apple = 1
+
+def swordgetchance(sword):
+    chance = random.randrange(0,100)
+    if chance < 35:
+        os.system('color 2')
+        inv.append("Sword")
+        print("You Got A Sword!")
+        print("         />_________________________________")
+        print("[########[]_________________________________>")
+        print("         \>								    ")
+        sword = 1
+        time.sleep(1)
+        os.system('color b')
+    return sword
+def Applegetchance(Apple):
+    chance = random.randrange(0,100)
+    if chance < 35:
+        os.system('color b')
+        inv.append("Apple")
+        print("You look around, you find a small red thing, turns out its a yummy apple! (You Got A Apple!)")
+        Apple = 1
+        print("  ,--./,-,")
+        print(" / #      \ ")
+        print("|          |")
+        print(" \        / ")
+        print("  \______/")
+        time.sleep(1)
+        os.system('color b')
+    return Apple
+def BossBattle(sword,Apple,PlayerHealth,STOPGAME):
+    print("You ran into a monster! He has 200 health!")
+    PlayerHealth = 100
+    MonsterHealth = 200
+    
+    while MonsterHealth > 0 and PlayerHealth > 0:
+        PlayerHealth = PlayerHealth - random.randrange(0,25)
+        chance = random.randrange(0,100)
+        if chance < 50:
+            print("The monster hit you!, Your health is:", PlayerHealth)
+        else:
+            print("The monster missed!")
+        PlayerChoice = input("You can use these moves:Sword (If you have one),Apple (If you have one)")
+        if (PlayerChoice == "Apple" and Apple == 1):
+                PlayerHealth = PlayerHealth + random.randrange(10,40)
+                print("You healed 10 Hp, your health is:",PlayerHealth)
+           
+        if (PlayerChoice == "Sword" and sword == 1):
+            chance = random.randrange(0,100)
+            if sword == 1:
+                if chance < 50:
+                    MonsterHealth = MonsterHealth - random.randrange(30,50)
+                    print("You hit the monster! His Health is", MonsterHealth)
+                    mixer.init()
+                    mixer.music.load('Woosh.mp3')
+                    mixer.music.play()
+                    time.sleep(0.3)
+                    mixer.init()
+                    mixer.music.load('SwordHit.mp3')
+                    mixer.music.play()
+                else:
+                    print("You missed!")
+        if PlayerHealth <= 0:
+            STOPGAME = 1
+        if MonsterHealth <= 0:
+            print("YOU WON! The gold key is now yours!")
+            beatmonster = True
+    return STOPGAME
+    
+while STOPGAME != 1:
+    #room 1 ----------------------------------------------
+    if (room == 1 and STOPGAME != 1):
+        
+        choice = input("You Are in room 1, You can go South")
+        if choice == "South":
+            room = 2
+        if choice == "Look":
+            print("Nothing Here other then what looks like a prison, you don't know why your in a prison, but it becomes clear you need to escape")
+            
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+     #room 2 ----------------------------------------------
+    if (room == 2 and STOPGAME != 1):
+       
+        choice = input("You Are in room 2, You can go North, South, West If you Have the Yellow Key, East if you have the Blue Key")
+        if choice == "East":
+            if BlueKey == 1:
+                
+                print("You Unlock The Blue Door")
+                room = 4
+            elif BlueKey == 0:
+                #print("You dont have the Blue key!")
+                room = 2
+        if choice == "South":
+            room = 3
+            
+        if choice == "West":
+            
+            if YellowKey == 1:
+                
+                print("You unlock The Yellow Door")
+                room = 12
+            elif YellowKey == 0:
+                #print("You dont have the Yellow key!")
+                room = 2
+        if choice == "North":
+            room = 1
+        if choice == "Look":
+            print("Looks like a desk of some sort, you see a Yellow Door And A Blue door, you feel as if one of these doors is the key to escape, but there both locked, better find a key")
+            
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+        #room 3 ----------------------------------------------
+    if (room == 3 and STOPGAME != 1):
+        
+        choice = input("You Are in room 3, You can go North")
+        if choice == "North":
+            room = 2
+        if choice == "Look":
+            print("You look around, Looks like another cell, and on the ground by some dirt, you find a small blue key (YOU GOT THE BLUE KEY)")
+            inv.append("Blue Key")
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+            BlueKey = 1
+        if choice == "Inventory":
+            print(inv)
+    #Room 4---------------------------------------
+    if (room == 4 and STOPGAME != 1):
+        choice = input("You Are in room 4, You can go East or West")
+        if choice == "East":
+            room = 5
+        if choice == "West":
+            room = 2
+        if choice == "Look":
+            print("You look around, It just looks like a plain old broken down prison hallway")
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+    #Room 5---------------------------------------
+    if (room == 5 and STOPGAME != 1):
+        choice = input("You Are in room 5, You can go East, West or North")
+        if choice == "East":
+            room = 6
+        if choice == "West":
+            room = 4
+        if choice == "North":
+            room = 10
+        if choice == "Look":
+            print("You look around, It just looks like a plain old broken down prison hallway")
+            
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+            
+    #Room 6---------------------------------------
+    if (room == 6 and STOPGAME != 1):
+        choice = input("You Are in room 6, You can go West or South")
+        if choice == "South":
+            room = 7
+        if choice == "West":
+            room = 5
+        if choice == "Look":
+            print("You look around, It just looks like a plain old broken down prison hallway")
+            
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+     #Room 7---------------------------------------
+    if (room == 7 and STOPGAME != 1):
+        choice = input("You Are in room 7, You can go North or South")
+        if choice == "South":
+            room = 8
+        if choice == "North":
+            room = 6
+        
+        if choice == "Look":
+            print("You look around, It just looks like a plain old broken down prison hallway")
+            
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+            
+    if (room == 8 and STOPGAME != 1):
+        choice = input("You Are in room 8, You can go West or North")
+        if choice == "West":
+            room = 9
+        if choice == "North":
+            room = 7
+        
+        if choice == "Look":
+            print("You look around, It just looks like a plain old broken down prison hallway")
+            
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+    if (room == 9 and STOPGAME != 1):
+        STOPGAME = BossBattle(sword,Apple,PlayerHealth,STOPGAME)
+        beatmonster = True
+        if STOPGAME == 1:
+        
+            break
+        YellowKey = 1
+        inv.append("Yellow Key")
+        choice = input("You Are in room 9, You can go East")
+        if choice == "East":
+            room = 8
+        if choice == "Look":
+            print("You look around, It looks like a very big prison cell, like it was not ment for a human.")
+            
+            
+          
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+    if (room == 12 and STOPGAME != 1):
+        print("You look around, there is a broken gaint door in front of you, and you pry it open, revealing the exit, now be free!")
+        print("You beat the game, nice job! There might be more to come but for now heres what you had in your inventory:",inv)
+        STOPGAME = 1
+    #EXTRA ROOMS--------------------------------------------------------------------------------------------------------------
+    if (room == 10 and STOPGAME != 1):
+        choice = input("You Are in room 10, You can go North or South")
+        if choice == "North":
+            room = 11
+        if choice == "South":
+            room = 5
+        if choice == "Look":
+            print("You look around, It just looks like a plain old broken down prison hallway")
+            
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+    if (room == 11 and STOPGAME != 1):
+        choice = input("You Are in room 11, You can go South")
+        if choice == "South":
+            room = 10
+        if choice == "Look":
+            print("You look around, It seems you hit a dead end")
+            
+            sword = swordgetchance(sword)
+            Apple = Applegetchance(Apple)
+        if choice == "Inventory":
+            print(inv)
+if beatmonster == False:
+    print("YOU DIED")
+else:
+    print("Thank you for playing! :D")
+                                         
